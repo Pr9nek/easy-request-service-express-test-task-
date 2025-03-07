@@ -1,0 +1,32 @@
+{
+  "name": "easy-request-service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "npx eslint src/**/*.ts",
+    "build": "tsc",
+    "dev": "ts-node-dev src/app.ts",
+    "start": "ts-node src/app.ts"
+  },
+  "keywords": [],
+  "author": "Prian",
+  "license": "ISC",
+  "description": "test task for Easy Request Service",
+  "devDependencies": {
+    "@eslint/js": "^9.21.0",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.9",
+    "@typescript-eslint/eslint-plugin": "^8.26.0",
+    "@typescript-eslint/parser": "^8.26.0",
+    "eslint": "^9.21.0",
+    "globals": "^16.0.0",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.26.0"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
