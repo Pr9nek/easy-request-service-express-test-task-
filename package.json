@@ -15,7 +15,10 @@
   "description": "test task for Easy Request Service",
   "devDependencies": {
     "@eslint/js": "^9.21.0",
+    "@types/dotenv": "^6.1.1",
     "@types/express": "^5.0.0",
+    "@types/express-winston": "^3.0.4",
+    "@types/mongoose": "^5.11.96",
     "@types/node": "^22.13.9",
     "@typescript-eslint/eslint-plugin": "^8.26.0",
     "@typescript-eslint/parser": "^8.26.0",
@@ -27,6 +30,13 @@
     "typescript-eslint": "^8.26.0"
   },
   "dependencies": {
-    "express": "^4.21.2"
+    "celebrate": "^15.0.3",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-winston": "^4.2.0",
+    "joi": "^17.13.3",
+    "mongoose": "^8.12.1",
+    "winston": "^3.17.0",
+    "winston-daily-rotate-file": "^5.0.0"
   }
 }
