@@ -1,7 +1,6 @@
-import express from 'express';
 import mongoose from "mongoose";
 import dotenv from 'dotenv';
-import exp from "constants";
+import app from './app';
 
 // Загружаем переменные из .env
 dotenv.config();
@@ -10,7 +9,7 @@ dotenv.config();
 const PORT = process.env.PORT || 3000;
 const MONGO_URL = process.env.MONGO_URL || 'mongodb://localhost:27017/requests_db';
 
-const app = express();
+// Подключаемся к MongoDB и запускаем сервер
 mongoose
     .connect(MONGO_URL)
     .then(() => {
@@ -24,6 +23,6 @@ mongoose
         console.error('MongoDB connection error:', err);
     });
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
+// app.get('/', (req, res) => {
+//     res.send('Hello World!');
+// });
