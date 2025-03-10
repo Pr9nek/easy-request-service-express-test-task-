@@ -2,16 +2,17 @@ import { NextFunction, Request, Response } from 'express';
 import { constants } from 'http2';
 
 interface IError extends Error {
-    status?: number;
+    statusCode?: number;
 }
 
 const errorHandler = (err: IError, req: Request, res: Response, next: NextFunction) => {
-    const { status = 500, message } = err;
+    const { statusCode = 500, message } = err;
+    console.log('Error:', { statusCode, message, err }); // Для отладки
 
     res
-        .status(status)
+        .status(statusCode)
         .send({
-            message: status === constants.HTTP_STATUS_INTERNAL_SERVER_ERROR 
+            message: statusCode === constants.HTTP_STATUS_INTERNAL_SERVER_ERROR 
             ? 'На сервере произошла ошибка' 
             : message,
     });
