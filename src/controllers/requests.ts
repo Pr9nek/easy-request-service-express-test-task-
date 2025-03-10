@@ -77,27 +77,57 @@ export const cancelRequest = async (req: Request, res: Response, next: NextFunct
     }
 };
 
+// export const getRequests = async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//         const { date, startDate, endDate } = req.query as FilterRequestsQuery;
+//         const query: any = {};
+
+//         if (date) {
+//             query.createdAt = {
+//                 $gte: new Date(date).setHours(0, 0, 0, 0),
+//                 $lte: new Date(date).setHours(23, 59, 59, 999),
+//             };
+//         } else if (startDate && endDate) {
+//             query.createdAt = {
+//                 $gte: new Date(startDate),
+//                 $lte: new Date(endDate),
+//             };
+//         }
+
+//         const requests = await RequestModel.find(query);
+//         res
+//             .status(constants.HTTP_STATUS_OK)
+//             .json(requests);
+//     } catch (error) {
+//         return next(error);
+//     }
+// };
+
 export const getRequests = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { date, startDate, endDate } = req.query as FilterRequestsQuery;
         const query: any = {};
 
         if (date) {
+            const start = new Date(`${date.split('T')[0]}T00:00:00.000Z`);
+            const end = new Date(`${date.split('T')[0]}T23:59:59.999Z`);
+            console.log('Date filter:', { $gte: start, $lte: end });
             query.createdAt = {
-                $gte: new Date(date).setHours(0, 0, 0, 0),
-                $lte: new Date(date).setHours(23, 59, 59, 999),
+                $gte: start,
+                $lte: end,
             };
         } else if (startDate && endDate) {
+            const start = new Date(`${startDate.split('T')[0]}T00:00:00.000Z`);
+            const end = new Date(`${endDate.split('T')[0]}T23:59:59.999Z`);
+            console.log('Range filter:', { $gte: start, $lte: end });
             query.createdAt = {
-                $gte: new Date(startDate),
-                $lte: new Date(endDate),
+                $gte: start,
+                $lte: end,
             };
         }
 
         const requests = await RequestModel.find(query);
-        res
-            .status(constants.HTTP_STATUS_OK)
-            .json(requests);
+        res.status(constants.HTTP_STATUS_OK).json(requests);
     } catch (error) {
         return next(error);
     }
