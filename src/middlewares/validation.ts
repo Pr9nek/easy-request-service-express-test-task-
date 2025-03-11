@@ -27,6 +27,8 @@ export const validateFilterRequests = celebrate({
             is: Joi.exist(),
             then: Joi.required(),
         }),
+        limit: Joi.number().integer().min(1).max(100).default(10).optional(),
+        skip: Joi.number().integer().min(0).default(0).optional(),
     }),
 });
 

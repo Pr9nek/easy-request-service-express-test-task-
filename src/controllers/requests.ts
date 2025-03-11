@@ -2,9 +2,13 @@ import { Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
 import BadRequestError from '../errors/badRequestError';
 import NotFoundError from '../errors/notFoundError';
-import RequestModel, { RequestStatus } from '../models/request';
+import RequestModel from '../models/request';
+import { RequestStatus } from '../types/types';
+import { RequestDocument } from '../types/types';
+import { FilterQuery } from 'mongoose';
 import { CreateRequestBody, CompleteRequestBody, CancelRequestBody, FilterRequestsQuery } from '../types/types';
 import { constants } from 'http2';
+import getDayRange from '../utils/utils';
 
 export const createRequest = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -26,8 +30,8 @@ export const takeRequestInProgress = async (req: Request, res: Response, next: N
         const request = await RequestModel.findByIdAndUpdate(
             req.params.id,
             { status: RequestStatus.IN_PROGRESS, updatedAt: new Date() },
-            { new: true }
-        );
+            { new: true } 
+        );  
         if (!request) {
             throw new NotFoundError('Обращение не найдено');
         }
@@ -77,56 +81,30 @@ export const cancelRequest = async (req: Request, res: Response, next: NextFunct
     }
 };
 
-// export const getRequests = async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         const { date, startDate, endDate } = req.query as FilterRequestsQuery;
-//         const query: any = {};
-
-//         if (date) {
-//             query.createdAt = {
-//                 $gte: new Date(date).setHours(0, 0, 0, 0),
-//                 $lte: new Date(date).setHours(23, 59, 59, 999),
-//             };
-//         } else if (startDate && endDate) {
-//             query.createdAt = {
-//                 $gte: new Date(startDate),
-//                 $lte: new Date(endDate),
-//             };
-//         }
-
-//         const requests = await RequestModel.find(query);
-//         res
-//             .status(constants.HTTP_STATUS_OK)
-//             .json(requests);
-//     } catch (error) {
-//         return next(error);
-//     }
-// };
-
 export const getRequests = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { date, startDate, endDate } = req.query as FilterRequestsQuery;
-        const query: any = {};
+        const { date, startDate, endDate, limit = '10', skip = '0' } = req.query as FilterRequestsQuery;
+        const query: FilterQuery<RequestDocument> = {};
 
         if (date) {
-            const start = new Date(`${date.split('T')[0]}T00:00:00.000Z`);
-            const end = new Date(`${date.split('T')[0]}T23:59:59.999Z`);
-            console.log('Date filter:', { $gte: start, $lte: end });
-            query.createdAt = {
-                $gte: start,
-                $lte: end,
-            };
+            const { start, end } = getDayRange(date);
+            query.createdAt = { 
+                $gte: start, 
+                $lte: end 
+                };
+            
         } else if (startDate && endDate) {
-            const start = new Date(`${startDate.split('T')[0]}T00:00:00.000Z`);
-            const end = new Date(`${endDate.split('T')[0]}T23:59:59.999Z`);
-            console.log('Range filter:', { $gte: start, $lte: end });
-            query.createdAt = {
-                $gte: start,
-                $lte: end,
+            const { start } = getDayRange(startDate);
+            const { end } = getDayRange(endDate);
+            query.createdAt = { 
+                $gte: start, 
+                $lte: end 
+                };
             };
-        }
 
-        const requests = await RequestModel.find(query);
+        const requests = await RequestModel.find(query)
+            .limit(parseInt(limit))
+            .skip(parseInt(skip));
         res.status(constants.HTTP_STATUS_OK).json(requests);
     } catch (error) {
         return next(error);

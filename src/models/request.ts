@@ -1,31 +1,15 @@
-import mongoose, { Schema, Document } from 'mongoose';
-
-export enum RequestStatus {
-    NEW = 'Новое',
-    IN_PROGRESS = 'В работе',
-    COMPLETED = 'Завершено',
-    CANCELLED = 'Отменено',
-}
-
-interface IRequest extends Document {
-    text: string;
-    topic: string;
-    status: RequestStatus;
-    resolution?: string;
-    cancellationReason?: string;
-    createdAt: Date;
-    updatedAt: Date;
-}
+import mongoose, { Schema } from 'mongoose';
+import { IRequest, RequestStatus, RequestModel } from '../types/types';
 
 const requestSchema: Schema = new Schema(
     {
         text: { 
             type: String, 
-            required: [true, 'Поле name является обязательным'] 
+            required: [true, 'Поле text является обязательным'] 
         },
         topic: { 
             type: String, 
-            required: [true, 'Поле name является обязательным'] 
+            required: [true, 'Поле topic является обязательным'] 
         },
         status: {
             type: String,
@@ -44,4 +28,5 @@ const requestSchema: Schema = new Schema(
     { versionKey: false }
 );
 
-export default mongoose.model<IRequest>('Request', requestSchema);
+const RequestModel = mongoose.model<IRequest>('Request', requestSchema) as RequestModel;
+export default RequestModel;
