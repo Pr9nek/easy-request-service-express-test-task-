@@ -1,4 +1,4 @@
-import { HydratedDocument, Model } from 'mongoose';
+import { HydratedDocument } from 'mongoose';
 
 export enum RequestStatus {
     NEW = 'Новое',
@@ -17,7 +17,6 @@ export interface IRequest {
 }
 
 export type RequestDocument = HydratedDocument<IRequest>;
-export type RequestModel = Model<IRequest>;
 export interface CreateRequestBody {
     text: string;
     topic: string;
@@ -25,11 +24,9 @@ export interface CreateRequestBody {
 export interface CompleteRequestBody {
     resolution: string;
 }
-
 export interface CancelRequestBody {
     cancellationReason: string;
 }
-
 export interface FilterRequestsQuery {
     date?: string;
     startDate?: string;

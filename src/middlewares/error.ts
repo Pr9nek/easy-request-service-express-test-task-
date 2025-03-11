@@ -1,11 +1,11 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { constants } from 'http2';
 
 interface IError extends Error {
     statusCode?: number;
 }
 
-const errorHandler = (err: IError, req: Request, res: Response, next: NextFunction) => {
+const errorHandler = (err: IError, req: Request, res: Response) => {
     const { statusCode = 500, message } = err;
     console.log('Error:', { statusCode, message, err }); // Для отладки
 

@@ -1,5 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
-import { IRequest, RequestStatus, RequestModel } from '../types/types';
+import { IRequest, RequestStatus } from '../types/types';
 
 const requestSchema: Schema = new Schema(
     {
@@ -28,5 +28,5 @@ const requestSchema: Schema = new Schema(
     { versionKey: false }
 );
 
-const RequestModel = mongoose.model<IRequest>('Request', requestSchema) as RequestModel;
+const RequestModel = mongoose.model<IRequest>('Request', requestSchema);
 export default RequestModel;
