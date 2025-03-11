@@ -10,7 +10,7 @@ const app = express();
 app.use(requestLogger);
 
 // Парсинг JSON в теле запроса
-app.use(express.json());
+app.use(express.json({ limit: '10kb' })); // Ограничивает тело запроса до 10 килобайт. Если запрос больше, сервер вернёт 413 Payload Too Large.
 
 // Подключение маршрутов для обращений
 app.use('/requests', requestRoutes);
